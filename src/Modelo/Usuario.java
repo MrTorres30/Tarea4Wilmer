@@ -1,6 +1,8 @@
 package Modelo;
 
 public class Usuario extends Cuenta {
+    
+    // Atributos propios del usuario
     private int id;
     private String nombre;
     private String apellido;
@@ -10,10 +12,12 @@ public class Usuario extends Cuenta {
     public Usuario() {
     }
 
+    // Constructor que inicializa solo el nombre de usuario y la contraseña
     public Usuario(String nombreUsuario, String contrasena) {
         super(nombreUsuario, contrasena);
     }
 
+    // Constructor usado al registrar un nuevo usuario
     public Usuario(String nombreUsuario, String nombre, String apellido, String telefono, String correo, String contrasena) {
         super(nombreUsuario, contrasena);
         this.nombre = nombre;
@@ -22,6 +26,7 @@ public class Usuario extends Cuenta {
         this.correo = correo;
     }
 
+    // Constructor usado cuando también se necesita manejar el id del usuario
     public Usuario(int id, String nombreUsuario, String nombre, String apellido, String telefono, String correo, String contrasena) {
         super(nombreUsuario, contrasena);
         this.id = id;
@@ -71,6 +76,7 @@ public class Usuario extends Cuenta {
         this.correo = correo;
     }
 
+    // esto nos indica que este método está siendo sobrescrito
     @Override
     public String mostrarTipoCuenta() {
         return "Usuario del sistema";

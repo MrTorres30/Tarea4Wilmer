@@ -1,12 +1,15 @@
 package Modelo;
 
 public abstract class Cuenta {
+    
+    // Estos atributos guardan el usuario y la contraseña de la cuenta
     protected String nombreUsuario;
     protected String contrasena;
 
     public Cuenta() {
     }
 
+    // Constructor que permite inicializar el usuario y la contraseña
     public Cuenta(String nombreUsuario, String contrasena) {
         this.nombreUsuario = nombreUsuario;
         this.contrasena = contrasena;
@@ -28,5 +31,6 @@ public abstract class Cuenta {
         this.contrasena = contrasena;
     }
 
+    // Método abstracto que será definido en las clases hijas
     public abstract String mostrarTipoCuenta();
 }
