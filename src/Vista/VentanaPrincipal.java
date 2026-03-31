@@ -1,56 +1,181 @@
-package Vista;
+package vista;
 
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FlowLayout;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
-import Data.UsuarioDAO;
-import modelo.Usuario;
-import java.awt.*;
-import java.util.ArrayList;
+
+import data.UsuarioDAO;
+import Modelo.Usuario;
 
 public class VentanaPrincipal extends JFrame {
-    private JTable tabla;
-    private DefaultTableModel modelo;
-    private UsuarioDAO dao = new UsuarioDAO();
+
+    private JTable tablaUsuarios;
+    private DefaultTableModel modeloTabla;
+
+    private JButton btnNuevo;
+    private JButton btnActualizar;
+    private JButton btnEliminar;
+    private JButton btnCerrarSesion;
+
+    private UsuarioDAO usuarioDAO;
 
     public VentanaPrincipal() {
-        setTitle("Listado de Usuarios"); [cite: 4, 52]
-        setSize(600, 400);
-        setLayout(new BorderLayout());
+        usuarioDAO = new UsuarioDAO();
 
-        modelo = new DefaultTableModel(new String[]{"Usuario", "Nombre", "Teléfono", "Correo"}, 0);
-        tabla = new JTable(modelo);
-        add(new JScrollPane(tabla), BorderLayout.CENTER);
+        setTitle("Pantalla Principal");
+        setSize(900, 500);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
 
-        JPanel p = new JPanel();
-        JButton btnDel = new JButton("Eliminar"); [cite: 60]
-        JButton btnOut = new JButton("Cerrar Sección"); [cite: 61]
-        
-        p.add(btnDel); p.add(btnOut);
-        add(p, BorderLayout.SOUTH);
-
-        cargar();
-
-        btnDel.addActionListener(e -> {
-            int fila = tabla.getSelectedRow();
-            if(fila != -1) {
-                try {
-                    dao.eliminar(modelo.getValueAt(fila, 0).toString());
-                    cargar(); // Actualización automática [cite: 15]
-                } catch (Exception ex) { ex.printStackTrace(); }
-            }
-        });
-
-        btnOut.addActionListener(e -> { [cite: 11, 12]
-            new VentanaLogin().setVisible(true);
-            this.dispose();
-        });
+        iniciarComponentes();
+        cargarUsuariosEnTabla();
     }
 
-    private void cargar() {
-        modelo.setRowCount(0);
-        try {
-            ArrayList<Usuario> lista = dao.listar();
-            for(Usuario u : lista) modelo.addRow(new Object[]{u.getUsername(), u.getNombre(), u.getTelefono(), u.getCorreo()});
-        } catch (Exception e) { e.printStackTrace(); }
+    private void iniciarComponentes() {
+        setLayout(new BorderLayout());
+
+        JLabel lblTitulo = new JLabel("CLIENTES REGISTRADOS", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        lblTitulo.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
+
+        modeloTabla = new DefaultTableModel();
+        modeloTabla.addColumn("ID");
+        modeloTabla.addColumn("Nombre");
+        modeloTabla.addColumn("Apellido");
+        modeloTabla.addColumn("Telefono");
+        modeloTabla.addColumn("Correo Electronico");
+        modeloTabla.addColumn("Usuario");
+
+        tablaUsuarios = new JTable(modeloTabla);
+        tablaUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        tablaUsuarios.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaUsuarios.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaUsuarios.getColumnModel().getColumn(0).setWidth(0);
+
+        JScrollPane scroll = new JScrollPane(tablaUsuarios);
+        scroll.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+
+        btnNuevo = new JButton("NUEVO");
+        btnActualizar = new JButton("ACTUALIZAR");
+        btnEliminar = new JButton("ELIMINAR");
+        btnCerrarSesion = new JButton("CERRAR SESION");
+
+        estilizarBoton(btnNuevo);
+        estilizarBoton(btnActualizar);
+        estilizarBoton(btnEliminar);
+        estilizarBoton(btnCerrarSesion);
+
+        panelBotones.add(btnNuevo);
+        panelBotones.add(btnActualizar);
+        panelBotones.add(btnEliminar);
+        panelBotones.add(btnCerrarSesion);
+
+        add(lblTitulo, BorderLayout.NORTH);
+        add(scroll, BorderLayout.CENTER);
+        add(panelBotones, BorderLayout.SOUTH);
+
+        btnNuevo.addActionListener(e -> abrirNuevoRegistro());
+        btnActualizar.addActionListener(e -> actualizarUsuario());
+        btnEliminar.addActionListener(e -> eliminarUsuario());
+        btnCerrarSesion.addActionListener(e -> cerrarSesion());
+    }
+
+    private void estilizarBoton(JButton boton) {
+        boton.setBackground(new Color(52, 104, 188));
+        boton.setForeground(Color.WHITE);
+        boton.setFont(new Font("Arial", Font.BOLD, 14));
+        boton.setFocusPainted(false);
+    }
+
+    public void cargarUsuariosEnTabla() {
+        modeloTabla.setRowCount(0);
+
+        List<Usuario> lista = usuarioDAO.obtenerTodos();
+
+        for (Usuario usuario : lista) {
+            modeloTabla.addRow(new Object[] {
+                    usuario.getId(),
+                    usuario.getNombre(),
+                    usuario.getApellido(),
+                    usuario.getTelefono(),
+                    usuario.getCorreo(),
+                    usuario.getNombreUsuario()
+            });
+        }
+    }
+
+    private void abrirNuevoRegistro() {
+        dispose();
+        new VentanaRegistro(this).setVisible(true);
+    }
+
+    private void actualizarUsuario() {
+        int fila = tablaUsuarios.getSelectedRow();
+
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un usuario para actualizar.");
+            return;
+        }
+
+        int id = Integer.parseInt(modeloTabla.getValueAt(fila, 0).toString());
+        Usuario usuario = usuarioDAO.buscarPorId(id);
+
+        if (usuario != null) {
+            dispose();
+            new VentanaRegistro(this, usuario).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo cargar el usuario seleccionado.");
+        }
+    }
+
+    private void eliminarUsuario() {
+        int fila = tablaUsuarios.getSelectedRow();
+
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un usuario para eliminar.");
+            return;
+        }
+
+        int id = Integer.parseInt(modeloTabla.getValueAt(fila, 0).toString());
+        String nombre = modeloTabla.getValueAt(fila, 1).toString();
+
+        int confirmacion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Seguro que desea eliminar al usuario " + nombre + "?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            if (usuarioDAO.eliminarUsuario(id)) {
+                JOptionPane.showMessageDialog(this, "Usuario eliminado correctamente.");
+                cargarUsuariosEnTabla();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo eliminar el usuario.");
+            }
+        }
+    }
+
+    private void cerrarSesion() {
+        dispose();
+        new LoginVentana().setVisible(true);
     }
 }
