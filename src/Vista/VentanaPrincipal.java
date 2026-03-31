@@ -37,7 +37,7 @@ public class VentanaPrincipal extends JFrame {
         usuarioDAO = new UsuarioDAO();
 
         setTitle("Pantalla Principal");
-        setSize(900, 500);
+        setSize(980, 560);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
@@ -49,8 +49,25 @@ public class VentanaPrincipal extends JFrame {
     private void iniciarComponentes() {
         setLayout(new BorderLayout());
 
+        Color fondoPrincipal = new Color(12, 24, 42);
+        Color fondoPanel = new Color(22, 39, 66);
+        Color textoClaro = new Color(225, 230, 235);
+        Color azulBoton = new Color(55, 95, 150);
+        Color azulBoton2 = new Color(72, 118, 178);
+        Color rojoBoton = new Color(170, 70, 70);
+        Color grisBoton = new Color(80, 90, 110);
+        Color bordePanel = new Color(55, 80, 115);
+
+        Font fuenteTitulo = new Font("Consolas", Font.BOLD, 28);
+        Font fuenteBotones = new Font("Consolas", Font.BOLD, 14);
+        Font fuenteTabla = new Font("Consolas", Font.PLAIN, 13);
+        Font fuenteHeader = new Font("Consolas", Font.BOLD, 13);
+
+        getContentPane().setBackground(fondoPrincipal);
+
         JLabel lblTitulo = new JLabel("CLIENTES REGISTRADOS", SwingConstants.CENTER);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        lblTitulo.setFont(fuenteTitulo);
+        lblTitulo.setForeground(textoClaro);
         lblTitulo.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
 
         modeloTabla = new DefaultTableModel();
@@ -63,25 +80,47 @@ public class VentanaPrincipal extends JFrame {
 
         tablaUsuarios = new JTable(modeloTabla);
         tablaUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tablaUsuarios.setRowHeight(24);
+        tablaUsuarios.setFont(fuenteTabla);
+        tablaUsuarios.setBackground(new Color(235, 240, 246));
+        tablaUsuarios.setForeground(Color.BLACK);
+        tablaUsuarios.setGridColor(new Color(180, 190, 205));
+        tablaUsuarios.setSelectionBackground(new Color(90, 130, 190));
+        tablaUsuarios.setSelectionForeground(Color.WHITE);
+
+        tablaUsuarios.getTableHeader().setFont(fuenteHeader);
+        tablaUsuarios.getTableHeader().setBackground(fondoPanel);
+        tablaUsuarios.getTableHeader().setForeground(textoClaro);
+        tablaUsuarios.getTableHeader().setReorderingAllowed(false);
 
         tablaUsuarios.getColumnModel().getColumn(0).setMinWidth(0);
         tablaUsuarios.getColumnModel().getColumn(0).setMaxWidth(0);
         tablaUsuarios.getColumnModel().getColumn(0).setWidth(0);
 
         JScrollPane scroll = new JScrollPane(tablaUsuarios);
-        scroll.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        scroll.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(bordePanel, 2),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
+        scroll.getViewport().setBackground(new Color(235, 240, 246));
+
+        JPanel panelCentro = new JPanel(new BorderLayout());
+        panelCentro.setBackground(fondoPrincipal);
+        panelCentro.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        panelCentro.add(scroll, BorderLayout.CENTER);
 
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        panelBotones.setBackground(fondoPrincipal);
 
         btnNuevo = new JButton("NUEVO");
         btnActualizar = new JButton("ACTUALIZAR");
         btnEliminar = new JButton("ELIMINAR");
         btnCerrarSesion = new JButton("CERRAR SESION");
 
-        estilizarBoton(btnNuevo);
-        estilizarBoton(btnActualizar);
-        estilizarBoton(btnEliminar);
-        estilizarBoton(btnCerrarSesion);
+        estilizarBoton(btnNuevo, azulBoton, textoClaro, fuenteBotones);
+        estilizarBoton(btnActualizar, azulBoton2, textoClaro, fuenteBotones);
+        estilizarBoton(btnEliminar, rojoBoton, textoClaro, fuenteBotones);
+        estilizarBoton(btnCerrarSesion, grisBoton, textoClaro, fuenteBotones);
 
         panelBotones.add(btnNuevo);
         panelBotones.add(btnActualizar);
@@ -89,7 +128,7 @@ public class VentanaPrincipal extends JFrame {
         panelBotones.add(btnCerrarSesion);
 
         add(lblTitulo, BorderLayout.NORTH);
-        add(scroll, BorderLayout.CENTER);
+        add(panelCentro, BorderLayout.CENTER);
         add(panelBotones, BorderLayout.SOUTH);
 
         btnNuevo.addActionListener(e -> abrirNuevoRegistro());
@@ -98,11 +137,12 @@ public class VentanaPrincipal extends JFrame {
         btnCerrarSesion.addActionListener(e -> cerrarSesion());
     }
 
-    private void estilizarBoton(JButton boton) {
-        boton.setBackground(new Color(52, 104, 188));
-        boton.setForeground(Color.WHITE);
-        boton.setFont(new Font("Arial", Font.BOLD, 14));
+    private void estilizarBoton(JButton boton, Color fondo, Color texto, Font fuente) {
+        boton.setBackground(fondo);
+        boton.setForeground(texto);
+        boton.setFont(fuente);
         boton.setFocusPainted(false);
+        boton.setBorder(BorderFactory.createEmptyBorder(12, 18, 12, 18));
     }
 
     public void cargarUsuariosEnTabla() {

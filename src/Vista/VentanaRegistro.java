@@ -34,11 +34,11 @@ public class VentanaRegistro extends JFrame {
     private UsuarioDAO usuarioDAO;
     private Usuario usuarioEditar;
     private VentanaPrincipal ventanaPrincipal;
-    private LoginVentana loginVentana;
+    private LoginVentana ventanaLogin;
 
     public VentanaRegistro(LoginVentana ventanaLogin) {
         this.usuarioDAO = new UsuarioDAO();
-        this.loginVentana = loginVentana;
+        this.ventanaLogin = ventanaLogin;
         configurarVentana("Registro de Usuario");
         iniciarComponentes();
     }
@@ -61,7 +61,7 @@ public class VentanaRegistro extends JFrame {
 
     private void configurarVentana(String titulo) {
         setTitle(titulo);
-        setSize(500, 500);
+        setSize(620, 560);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
@@ -70,14 +70,38 @@ public class VentanaRegistro extends JFrame {
     private void iniciarComponentes() {
         setLayout(new BorderLayout());
 
+        Color fondoPrincipal = new Color(236, 240, 245);
+        Color fondoPanel = new Color(248, 250, 252);
+        Color textoOscuro = new Color(18, 30, 48);
+        Color botonOscuro = new Color(20, 38, 65);
+        Color botonOscuro2 = new Color(35, 60, 95);
+        Color fondoCampos = new Color(220, 228, 236);
+        Color bordePanel = new Color(90, 110, 135);
+
+        Font fuenteTitulo = new Font("Consolas", Font.BOLD, 28);
+        Font fuenteTexto = new Font("Consolas", Font.BOLD, 14);
+        Font fuenteCampos = new Font("Consolas", Font.PLAIN, 14);
+        Font fuenteBotones = new Font("Consolas", Font.BOLD, 14);
+
+        getContentPane().setBackground(fondoPrincipal);
+
         JLabel lblTitulo = new JLabel(
                 usuarioEditar == null ? "REGISTRO DE USUARIO" : "ACTUALIZAR USUARIO",
                 SwingConstants.CENTER);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 22));
+        lblTitulo.setFont(fuenteTitulo);
+        lblTitulo.setForeground(textoOscuro);
         lblTitulo.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
 
-        JPanel panelFormulario = new JPanel(new GridLayout(8, 2, 10, 10));
-        panelFormulario.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        JPanel panelCentro = new JPanel(new BorderLayout());
+        panelCentro.setBackground(fondoPrincipal);
+        panelCentro.setBorder(BorderFactory.createEmptyBorder(10, 30, 25, 30));
+
+        JPanel panelFormulario = new JPanel(new GridLayout(8, 2, 14, 14));
+        panelFormulario.setBackground(fondoPanel);
+        panelFormulario.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(bordePanel, 2),
+                BorderFactory.createEmptyBorder(25, 25, 25, 25)
+        ));
 
         txtNombreUsuario = new JTextField();
         txtNombre = new JTextField();
@@ -87,41 +111,88 @@ public class VentanaRegistro extends JFrame {
         txtContrasena = new JPasswordField();
         txtConfirmarContrasena = new JPasswordField();
 
-        btnGuardar = new JButton(usuarioEditar == null ? "Registrar" : "Actualizar");
-        btnVolver = new JButton("Volver");
+        JLabel lblNombreUsuario = new JLabel("USUARIO:");
+        JLabel lblNombre = new JLabel("NOMBRE:");
+        JLabel lblApellido = new JLabel("APELLIDO:");
+        JLabel lblTelefono = new JLabel("TELEFONO:");
+        JLabel lblCorreo = new JLabel("CORREO:");
+        JLabel lblContrasena = new JLabel("CONTRASEÑA:");
+        JLabel lblConfirmar = new JLabel("CONFIRMAR:");
 
-        btnGuardar.setBackground(new Color(52, 104, 188));
-        btnGuardar.setForeground(Color.BLACK);
+        JLabel[] labels = {
+            lblNombreUsuario, lblNombre, lblApellido, lblTelefono,
+            lblCorreo, lblContrasena, lblConfirmar
+        };
 
-        btnVolver.setBackground(Color.DARK_GRAY);
-        btnVolver.setForeground(Color.WHITE);
+        for (JLabel lbl : labels) {
+            lbl.setForeground(textoOscuro);
+            lbl.setFont(fuenteTexto);
+        }
 
-        panelFormulario.add(new JLabel("Nombre de Usuario:"));
+        JTextField[] camposTexto = {
+            txtNombreUsuario, txtNombre, txtApellido, txtTelefono, txtCorreo
+        };
+
+        for (JTextField campo : camposTexto) {
+            campo.setBackground(fondoCampos);
+            campo.setForeground(Color.BLACK);
+            campo.setFont(fuenteCampos);
+            campo.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+        }
+
+        txtContrasena.setBackground(fondoCampos);
+        txtContrasena.setForeground(Color.BLACK);
+        txtContrasena.setFont(fuenteCampos);
+        txtContrasena.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+
+        txtConfirmarContrasena.setBackground(fondoCampos);
+        txtConfirmarContrasena.setForeground(Color.BLACK);
+        txtConfirmarContrasena.setFont(fuenteCampos);
+        txtConfirmarContrasena.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+
+        btnGuardar = new JButton(usuarioEditar == null ? "GUARDAR" : "ACTUALIZAR");
+        btnVolver = new JButton("VOLVER");
+
+        btnGuardar.setBackground(botonOscuro);
+        btnGuardar.setForeground(new Color(235, 240, 245));
+        btnGuardar.setFont(fuenteBotones);
+        btnGuardar.setFocusPainted(false);
+        btnGuardar.setBorder(BorderFactory.createEmptyBorder(12, 15, 12, 15));
+
+        btnVolver.setBackground(botonOscuro2);
+        btnVolver.setForeground(new Color(235, 240, 245));
+        btnVolver.setFont(fuenteBotones);
+        btnVolver.setFocusPainted(false);
+        btnVolver.setBorder(BorderFactory.createEmptyBorder(12, 15, 12, 15));
+
+        panelFormulario.add(lblNombreUsuario);
         panelFormulario.add(txtNombreUsuario);
 
-        panelFormulario.add(new JLabel("Nombre:"));
+        panelFormulario.add(lblNombre);
         panelFormulario.add(txtNombre);
 
-        panelFormulario.add(new JLabel("Apellido:"));
+        panelFormulario.add(lblApellido);
         panelFormulario.add(txtApellido);
 
-        panelFormulario.add(new JLabel("Telefono:"));
+        panelFormulario.add(lblTelefono);
         panelFormulario.add(txtTelefono);
 
-        panelFormulario.add(new JLabel("Correo Electronico:"));
+        panelFormulario.add(lblCorreo);
         panelFormulario.add(txtCorreo);
 
-        panelFormulario.add(new JLabel("Contraseña:"));
+        panelFormulario.add(lblContrasena);
         panelFormulario.add(txtContrasena);
 
-        panelFormulario.add(new JLabel("Confirmar Contraseña:"));
+        panelFormulario.add(lblConfirmar);
         panelFormulario.add(txtConfirmarContrasena);
 
         panelFormulario.add(btnGuardar);
         panelFormulario.add(btnVolver);
 
+        panelCentro.add(panelFormulario, BorderLayout.CENTER);
+
         add(lblTitulo, BorderLayout.NORTH);
-        add(panelFormulario, BorderLayout.CENTER);
+        add(panelCentro, BorderLayout.CENTER);
 
         btnGuardar.addActionListener(e -> guardarUsuario());
         btnVolver.addActionListener(e -> volver());

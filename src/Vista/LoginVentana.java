@@ -31,7 +31,7 @@ public class LoginVentana extends JFrame {
         usuarioDAO = new UsuarioDAO();
 
         setTitle("Login de Usuarios");
-        setSize(420, 280);
+        setSize(450, 320);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
@@ -42,27 +42,64 @@ public class LoginVentana extends JFrame {
     private void iniciarComponentes() {
         setLayout(new BorderLayout());
 
-        JLabel lblTitulo = new JLabel("LOGIN", SwingConstants.CENTER);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        Color fondoPrincipal = new Color(11, 25, 44);
+        Color fondoPanel = new Color(21, 38, 63);
+        Color textoClaro = new Color(210, 215, 220);
+        Color azulBoton = new Color(58, 95, 145);
+        Color azulBotonHover = new Color(72, 115, 175);
+        Color fondoCampos = new Color(235, 238, 243);
+
+        getContentPane().setBackground(fondoPrincipal);
+
+        JLabel lblTitulo = new JLabel("INICIAR SESION", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 26));
+        lblTitulo.setForeground(textoClaro);
         lblTitulo.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
 
-        JPanel panelFormulario = new JPanel(new GridLayout(4, 2, 10, 10));
-        panelFormulario.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        JPanel panelCentro = new JPanel(new BorderLayout());
+        panelCentro.setBackground(fondoPrincipal);
+        panelCentro.setBorder(BorderFactory.createEmptyBorder(10, 25, 25, 25));
+
+        JPanel panelFormulario = new JPanel(new GridLayout(4, 2, 12, 12));
+        panelFormulario.setBackground(fondoPanel);
+        panelFormulario.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(45, 65, 95), 1),
+                BorderFactory.createEmptyBorder(20, 20, 20, 20)
+        ));
 
         JLabel lblUsuario = new JLabel("Nombre de Usuario:");
+        lblUsuario.setForeground(textoClaro);
+        lblUsuario.setFont(new Font("Arial", Font.BOLD, 14));
+
         JLabel lblContrasena = new JLabel("Contraseña:");
+        lblContrasena.setForeground(textoClaro);
+        lblContrasena.setFont(new Font("Arial", Font.BOLD, 14));
 
         txtUsuario = new JTextField();
+        txtUsuario.setBackground(fondoCampos);
+        txtUsuario.setForeground(Color.BLACK);
+        txtUsuario.setFont(new Font("Arial", Font.PLAIN, 14));
+        txtUsuario.setBorder(BorderFactory.createEmptyBorder(6, 8, 6, 8));
+
         txtContrasena = new JPasswordField();
+        txtContrasena.setBackground(fondoCampos);
+        txtContrasena.setForeground(Color.BLACK);
+        txtContrasena.setFont(new Font("Arial", Font.PLAIN, 14));
+        txtContrasena.setBorder(BorderFactory.createEmptyBorder(6, 8, 6, 8));
 
         btnEntrar = new JButton("Entrar");
+        btnEntrar.setBackground(azulBoton);
+        btnEntrar.setForeground(textoClaro);
+        btnEntrar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnEntrar.setFocusPainted(false);
+        btnEntrar.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+
         btnRegistrarse = new JButton("Registrarse");
-
-        btnEntrar.setBackground(new Color(52, 104, 188));
-        btnEntrar.setForeground(Color.WHITE);
-
-        btnRegistrarse.setBackground(new Color(52, 104, 188));
-        btnRegistrarse.setForeground(Color.WHITE);
+        btnRegistrarse.setBackground(azulBotonHover);
+        btnRegistrarse.setForeground(textoClaro);
+        btnRegistrarse.setFont(new Font("Arial", Font.BOLD, 14));
+        btnRegistrarse.setFocusPainted(false);
+        btnRegistrarse.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
         panelFormulario.add(lblUsuario);
         panelFormulario.add(txtUsuario);
@@ -71,8 +108,10 @@ public class LoginVentana extends JFrame {
         panelFormulario.add(btnEntrar);
         panelFormulario.add(btnRegistrarse);
 
+        panelCentro.add(panelFormulario, BorderLayout.CENTER);
+
         add(lblTitulo, BorderLayout.NORTH);
-        add(panelFormulario, BorderLayout.CENTER);
+        add(panelCentro, BorderLayout.CENTER);
 
         btnEntrar.addActionListener(e -> iniciarSesion());
         btnRegistrarse.addActionListener(e -> abrirRegistro());
