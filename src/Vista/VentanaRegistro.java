@@ -91,7 +91,7 @@ public class VentanaRegistro extends JFrame {
         btnVolver = new JButton("Volver");
 
         btnGuardar.setBackground(new Color(52, 104, 188));
-        btnGuardar.setForeground(Color.WHITE);
+        btnGuardar.setForeground(Color.BLACK);
 
         btnVolver.setBackground(Color.DARK_GRAY);
         btnVolver.setForeground(Color.WHITE);

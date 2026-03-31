@@ -1,4 +1,4 @@
-package data;
+package data;   //llamamos el paquete en el que está
 
 import java.sql.Connection;
 import java.sql.DriverManager;
