@@ -1,10 +1,9 @@
 package WilmerProyecto4;
 
 public class Main {
-
-	public static void main(String[] args) {
-		System.out.println ("Hello Word");
-		System.out.println ("Commits y conexion con github");
-	}
-
+    public static void main(String[] args) {
+        Cuenta cuenta1 = new Cuenta("Wilmer", 1000);
+        cuenta1.ingresar(500);
+        cuenta1.mostrar();
+    }
 }
