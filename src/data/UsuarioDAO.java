@@ -1,15 +1,16 @@
 package data;
 
-import java.sql.Connection;
+import java.sql.Connection;  //esto es para concetar con el SQL
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
+import java.util.ArrayList;  //importamos/llamamos para poder usar arrys
 import java.util.List;
 
 import Modelo.Usuario;
 
 public class UsuarioDAO {
 
+    // Inserta un nuevo usuario en la base de datos
     public boolean insertarUsuario(Usuario usuario) {
         String sql = "INSERT INTO usuario (nombre_usuario, nombre, apellido, telefono, correo, contrasena) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -31,6 +32,7 @@ public class UsuarioDAO {
         }
     }
 
+    // Valida si el usuario y la contraseña existen en la base de datos
     public Usuario validarLogin(String nombreUsuario, String contrasena) {
         String sql = "SELECT * FROM usuario WHERE nombre_usuario = ? AND contrasena = ?";
 
@@ -61,6 +63,7 @@ public class UsuarioDAO {
         return null;
     }
 
+    // Obtiene la lista completa de usuarios registrados
     public List<Usuario> obtenerTodos() {
         List<Usuario> lista = new ArrayList<>();
         String sql = "SELECT * FROM usuario ORDER BY id DESC";
@@ -88,6 +91,7 @@ public class UsuarioDAO {
         return lista;
     }
 
+    // Actualiza los datos de un usuario según su id
     public boolean actualizarUsuario(Usuario usuario) {
         String sql = "UPDATE usuario SET nombre_usuario = ?, nombre = ?, apellido = ?, telefono = ?, correo = ?, contrasena = ? WHERE id = ?";
 
@@ -110,6 +114,7 @@ public class UsuarioDAO {
         }
     }
 
+    // Elimina un usuario de la base de datos por su id
     public boolean eliminarUsuario(int id) {
         String sql = "DELETE FROM usuario WHERE id = ?";
 
@@ -125,6 +130,7 @@ public class UsuarioDAO {
         }
     }
 
+    // Verifica si ya existe un nombre de usuario registrado
     public boolean existeUsuario(String nombreUsuario) {
         String sql = "SELECT id FROM usuario WHERE nombre_usuario = ?";
 
@@ -141,6 +147,7 @@ public class UsuarioDAO {
         }
     }
 
+    // Verifica si ya existe un correo registrado
     public boolean existeCorreo(String correo) {
         String sql = "SELECT id FROM usuario WHERE correo = ?";
 
@@ -157,6 +164,7 @@ public class UsuarioDAO {
         }
     }
 
+    // Verifica si el nombre de usuario existe en otro registro distinto al actual
     public boolean existeUsuarioOtro(int id, String nombreUsuario) {
         String sql = "SELECT id FROM usuario WHERE nombre_usuario = ? AND id <> ?";
 
@@ -174,6 +182,7 @@ public class UsuarioDAO {
         }
     }
 
+    // Verifica si el correo existe en otro registro distinto al actual
     public boolean existeCorreoOtro(int id, String correo) {
         String sql = "SELECT id FROM usuario WHERE correo = ? AND id <> ?";
 
@@ -191,6 +200,7 @@ public class UsuarioDAO {
         }
     }
 
+    // Busca un usuario específico por su id
     public Usuario buscarPorId(int id) {
         String sql = "SELECT * FROM usuario WHERE id = ?";
 
