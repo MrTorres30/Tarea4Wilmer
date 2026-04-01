@@ -20,6 +20,7 @@ import Modelo.Usuario;
 
 public class VentanaRegistro extends JFrame {
 
+    // Campos del formulario
     private JTextField txtNombreUsuario;
     private JTextField txtNombre;
     private JTextField txtApellido;
@@ -28,14 +29,17 @@ public class VentanaRegistro extends JFrame {
     private JPasswordField txtContrasena;
     private JPasswordField txtConfirmarContrasena;
 
+    // Botones de la ventana
     private JButton btnGuardar;
     private JButton btnVolver;
 
+    // Objetos necesarios para manejar el registro y la actualizacion
     private UsuarioDAO usuarioDAO;
     private Usuario usuarioEditar;
     private VentanaPrincipal ventanaPrincipal;
     private LoginVentana ventanaLogin;
 
+    // Constructor usado cuando la ventana se abre desde el login
     public VentanaRegistro(LoginVentana ventanaLogin) {
         this.usuarioDAO = new UsuarioDAO();
         this.ventanaLogin = ventanaLogin;
@@ -43,6 +47,7 @@ public class VentanaRegistro extends JFrame {
         iniciarComponentes();
     }
 
+    // Constructor usado cuando se quiere registrar desde la ventana principal
     public VentanaRegistro(VentanaPrincipal ventanaPrincipal) {
         this.usuarioDAO = new UsuarioDAO();
         this.ventanaPrincipal = ventanaPrincipal;
@@ -50,6 +55,7 @@ public class VentanaRegistro extends JFrame {
         iniciarComponentes();
     }
 
+    // Constructor usado cuando se quiere editar un usuario existente
     public VentanaRegistro(VentanaPrincipal ventanaPrincipal, Usuario usuarioEditar) {
         this.usuarioDAO = new UsuarioDAO();
         this.ventanaPrincipal = ventanaPrincipal;
@@ -59,6 +65,7 @@ public class VentanaRegistro extends JFrame {
         cargarDatosUsuario();
     }
 
+    // Configuracion general de la ventana
     private void configurarVentana(String titulo) {
         setTitle(titulo);
         setSize(620, 560);
@@ -70,6 +77,7 @@ public class VentanaRegistro extends JFrame {
     private void iniciarComponentes() {
         setLayout(new BorderLayout());
 
+        // Colores de la interfaz
         Color fondoPrincipal = new Color(236, 240, 245);
         Color fondoPanel = new Color(248, 250, 252);
         Color textoOscuro = new Color(18, 30, 48);
@@ -78,6 +86,7 @@ public class VentanaRegistro extends JFrame {
         Color fondoCampos = new Color(220, 228, 236);
         Color bordePanel = new Color(90, 110, 135);
 
+        // Fuentes utilizadas en esta ventana
         Font fuenteTitulo = new Font("Consolas", Font.BOLD, 28);
         Font fuenteTexto = new Font("Consolas", Font.BOLD, 14);
         Font fuenteCampos = new Font("Consolas", Font.PLAIN, 14);
@@ -85,6 +94,7 @@ public class VentanaRegistro extends JFrame {
 
         getContentPane().setBackground(fondoPrincipal);
 
+        // El titulo cambia dependiendo de si se esta registrando o actualizando
         JLabel lblTitulo = new JLabel(
                 usuarioEditar == null ? "REGISTRO DE USUARIO" : "ACTUALIZAR USUARIO",
                 SwingConstants.CENTER);
@@ -96,6 +106,7 @@ public class VentanaRegistro extends JFrame {
         panelCentro.setBackground(fondoPrincipal);
         panelCentro.setBorder(BorderFactory.createEmptyBorder(10, 30, 25, 30));
 
+        // Panel donde se colocan todos los campos del formulario
         JPanel panelFormulario = new JPanel(new GridLayout(8, 2, 14, 14));
         panelFormulario.setBackground(fondoPanel);
         panelFormulario.setBorder(BorderFactory.createCompoundBorder(
@@ -103,6 +114,7 @@ public class VentanaRegistro extends JFrame {
                 BorderFactory.createEmptyBorder(25, 25, 25, 25)
         ));
 
+        // Creacion de campos
         txtNombreUsuario = new JTextField();
         txtNombre = new JTextField();
         txtApellido = new JTextField();
@@ -111,6 +123,7 @@ public class VentanaRegistro extends JFrame {
         txtContrasena = new JPasswordField();
         txtConfirmarContrasena = new JPasswordField();
 
+        // Etiquetas del formulario
         JLabel lblNombreUsuario = new JLabel("USUARIO:");
         JLabel lblNombre = new JLabel("NOMBRE:");
         JLabel lblApellido = new JLabel("APELLIDO:");
@@ -124,6 +137,7 @@ public class VentanaRegistro extends JFrame {
             lblCorreo, lblContrasena, lblConfirmar
         };
 
+        // Se aplica el mismo estilo a todas las etiquetas
         for (JLabel lbl : labels) {
             lbl.setForeground(textoOscuro);
             lbl.setFont(fuenteTexto);
@@ -133,6 +147,7 @@ public class VentanaRegistro extends JFrame {
             txtNombreUsuario, txtNombre, txtApellido, txtTelefono, txtCorreo
         };
 
+        // Se aplica el mismo estilo a los campos de texto normales
         for (JTextField campo : camposTexto) {
             campo.setBackground(fondoCampos);
             campo.setForeground(Color.BLACK);
@@ -140,6 +155,7 @@ public class VentanaRegistro extends JFrame {
             campo.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
         }
 
+        // Estilo de los campos de contraseña
         txtContrasena.setBackground(fondoCampos);
         txtContrasena.setForeground(Color.BLACK);
         txtContrasena.setFont(fuenteCampos);
@@ -150,6 +166,7 @@ public class VentanaRegistro extends JFrame {
         txtConfirmarContrasena.setFont(fuenteCampos);
         txtConfirmarContrasena.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
 
+        // El texto del boton cambia si se esta registrando o actualizando
         btnGuardar = new JButton(usuarioEditar == null ? "GUARDAR" : "ACTUALIZAR");
         btnVolver = new JButton("VOLVER");
 
@@ -165,6 +182,7 @@ public class VentanaRegistro extends JFrame {
         btnVolver.setFocusPainted(false);
         btnVolver.setBorder(BorderFactory.createEmptyBorder(12, 15, 12, 15));
 
+        // Se agregan los componentes al formulario
         panelFormulario.add(lblNombreUsuario);
         panelFormulario.add(txtNombreUsuario);
 
@@ -194,10 +212,12 @@ public class VentanaRegistro extends JFrame {
         add(lblTitulo, BorderLayout.NORTH);
         add(panelCentro, BorderLayout.CENTER);
 
+        // Eventos de los botones
         btnGuardar.addActionListener(e -> guardarUsuario());
         btnVolver.addActionListener(e -> volver());
     }
 
+    // Carga la informacion del usuario cuando se entra en modo edicion
     private void cargarDatosUsuario() {
         txtNombreUsuario.setText(usuarioEditar.getNombreUsuario());
         txtNombre.setText(usuarioEditar.getNombre());
@@ -209,6 +229,7 @@ public class VentanaRegistro extends JFrame {
     }
 
     private void guardarUsuario() {
+        // Se obtienen los datos escritos en el formulario
         String nombreUsuario = txtNombreUsuario.getText().trim();
         String nombre = txtNombre.getText().trim();
         String apellido = txtApellido.getText().trim();
@@ -217,6 +238,7 @@ public class VentanaRegistro extends JFrame {
         String contrasena = new String(txtContrasena.getPassword()).trim();
         String confirmarContrasena = new String(txtConfirmarContrasena.getPassword()).trim();
 
+        // Validaciones para asegurarse de que no falten campos
         if (nombreUsuario.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Falta el campo: Nombre de Usuario");
             return;
@@ -246,11 +268,13 @@ public class VentanaRegistro extends JFrame {
             return;
         }
 
+        // Se verifica que ambas contraseñas coincidan
         if (!contrasena.equals(confirmarContrasena)) {
             JOptionPane.showMessageDialog(this, "La contraseña y la confirmación de la contraseña no coinciden.");
             return;
         }
 
+        // Si usuarioEditar es null, se registra un usuario nuevo
         if (usuarioEditar == null) {
             if (usuarioDAO.existeUsuario(nombreUsuario)) {
                 JOptionPane.showMessageDialog(this, "Ese nombre de usuario ya existe.");
@@ -268,6 +292,7 @@ public class VentanaRegistro extends JFrame {
                 JOptionPane.showMessageDialog(this, "Usuario registrado correctamente.");
                 dispose();
 
+                // Si se abrio desde la principal, se actualiza la tabla
                 if (ventanaPrincipal != null) {
                     ventanaPrincipal.cargarUsuariosEnTabla();
                     ventanaPrincipal.setVisible(true);
@@ -279,6 +304,7 @@ public class VentanaRegistro extends JFrame {
             }
 
         } else {
+            // Si usuarioEditar tiene valor, entonces se esta actualizando un registro existente
             if (usuarioDAO.existeUsuarioOtro(usuarioEditar.getId(), nombreUsuario)) {
                 JOptionPane.showMessageDialog(this, "Ese nombre de usuario ya existe en otro registro.");
                 return;
@@ -289,6 +315,7 @@ public class VentanaRegistro extends JFrame {
                 return;
             }
 
+            // Se actualizan los datos del objeto antes de enviarlos al DAO
             usuarioEditar.setNombreUsuario(nombreUsuario);
             usuarioEditar.setNombre(nombre);
             usuarioEditar.setApellido(apellido);

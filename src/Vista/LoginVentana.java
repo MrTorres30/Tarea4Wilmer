@@ -42,6 +42,7 @@ public class LoginVentana extends JFrame {
     private void iniciarComponentes() {
         setLayout(new BorderLayout());
 
+        // Aqui pongo los colores principales de la interfaz
         Color fondoPrincipal = new Color(11, 25, 44);
         Color fondoPanel = new Color(21, 38, 63);
         Color textoClaro = new Color(210, 215, 220);
@@ -60,6 +61,7 @@ public class LoginVentana extends JFrame {
         panelCentro.setBackground(fondoPrincipal);
         panelCentro.setBorder(BorderFactory.createEmptyBorder(10, 25, 25, 25));
 
+        // Panel donde se colocan los campos y botones del login configurando las coords
         JPanel panelFormulario = new JPanel(new GridLayout(4, 2, 12, 12));
         panelFormulario.setBackground(fondoPanel);
         panelFormulario.setBorder(BorderFactory.createCompoundBorder(
@@ -113,6 +115,7 @@ public class LoginVentana extends JFrame {
         add(lblTitulo, BorderLayout.NORTH);
         add(panelCentro, BorderLayout.CENTER);
 
+        // Acciones de los botones
         btnEntrar.addActionListener(e -> iniciarSesion());
         btnRegistrarse.addActionListener(e -> abrirRegistro());
     }
@@ -121,12 +124,14 @@ public class LoginVentana extends JFrame {
         String usuario = txtUsuario.getText().trim();
         String contrasena = new String(txtContrasena.getPassword()).trim();
 
+        // Valida que los campos no estén vacíos
         if (usuario.isEmpty() || contrasena.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "Debe ingresar su usuario y contraseña, si no está registrado debe registrarse");
             return;
         }
 
+        // Busca el usuario en la base de datos
         Usuario usuarioEncontrado = usuarioDAO.validarLogin(usuario, contrasena);
 
         if (usuarioEncontrado != null) {
@@ -136,7 +141,7 @@ public class LoginVentana extends JFrame {
             JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.");
         }
     }
-
+    // Metodo para abrir la ventana de registro
     private void abrirRegistro() {
         dispose();
         new VentanaRegistro(this).setVisible(true);
